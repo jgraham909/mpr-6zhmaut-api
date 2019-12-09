@@ -15,6 +15,9 @@ const BaudRate = parseInt(process.env.BAUDRATE || 9600);
 const SerialPort = require("serialport");
 const Readline = require('@serialport/parser-readline')
 
+const ZonePayload = 113; // in bytes
+const BitsPerCharacter = 8; // UTF-8 is 1-4 bytes per char, API response should be 1 byte
+
 var device = process.env.DEVICE || "/dev/ttyUSB0";
 var connection = new SerialPort(device, {
   baudRate: BaudRate,
@@ -24,6 +27,10 @@ const parser = connection.pipe(new Readline({ delimiter: "\n", encoding: "ascii"
 
 connection.on("open", function () {
   var zones = {};
+
+  const delayAmount = () => {
+    return Object.keys(zones).length * ZonePayload * BitsPerCharacter * 1000 / BaudRate;
+  }
 
   const queryControllers = async () => {
     for (let i = 1; i <= AmpCount; i++) {
@@ -195,7 +202,7 @@ connection.on("open", function () {
         setTimeout(callback, 10);
       },
       function () {
-        res.json(zones[req.zone]);
+        setTimeout(() => res.json(zones[req.zone]), delayAmount());
       }
     );
   });
