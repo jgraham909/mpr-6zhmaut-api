@@ -1,4 +1,4 @@
-FROM node:6.12.2-slim
+FROM node:10-jessie-slim
 MAINTAINER Jeff Graham <jgraham909@gmail.com>
 
 ENV DEBIAN_FRONTEND=noninteractive
@@ -10,6 +10,6 @@ ENV PORT=8181
 ENV CORS=true
 
 EXPOSE 8181
-
+RUN npm install
 CMD ["npm", "run", "start"]
 

@@ -6,7 +6,7 @@ Dockerized.
 
 ```
 docker build -t mpr-6zhmaut-api .
-docker run --device=/dev/ttyUSB0 -p 8181:8181 --cap-add SYS_PTRACE mpr-6zhmaut-api:latest
+docker run --restart=always -d --device=/dev/ttyUSB0 -p 8181:8181 --cap-add SYS_PTRACE mpr-6zhmaut-api:latest
 ```
 
 Monoprice sells this wacky [6 zone amp](https://www.monoprice.com/product?p_id=10761) with a serial interface. This tiny project wraps the serial interface with a JSON API.
